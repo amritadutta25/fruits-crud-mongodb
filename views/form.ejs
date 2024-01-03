@@ -1,0 +1,28 @@
+<form>
+    <input type="text" name="cheese">
+    <input type="text" name="cheese.cheese">
+    <button>Submit</button>
+</form>
+
+<script>
+
+    const form = document.querySelector("form")
+    console.log(form)
+    form.addEventListener("submit", (event) => {
+        event.preventDefault()
+        const formData = new FormData()
+        const cheese = {}
+        cheese.cheese = formData.get("cheese")
+        cheese.cheese.cheese = formData.get("cheese.cheese")
+        fetch("/formy", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cheese)
+        }).then(() => {
+            window.location = "/fruits"
+        })
+
+    })
+</script>

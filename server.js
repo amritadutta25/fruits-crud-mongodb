@@ -58,6 +58,7 @@ app.use(morgan("dev")); //logger
 app.use(methodOverride("_method")); // override form submissions
 app.use(express.urlencoded({ extended: true })); // parse urlencoded bodies
 app.use(express.static("public")); // serve files from public folder
+app.use(express.json())
 
 /////////////////////////////////////////////////////
 // Routes
@@ -158,6 +159,16 @@ app.put("/fruits/:id", async (req, res) => {
   }
 });
 
+// The Delete Route (delete to /fruits/:id)
+app.delete("/fruits/:id", async (req, res) => {
+  // get the id
+  const id = req.params.id
+  // delete the fruit
+  await Fruit.findByIdAndDelete(id)
+  // redirect to main page
+  res.redirect("/fruits")
+})
+
 // The Show Route (Get to /fruits/:id)
 app.get("/fruits/:id", async (req, res) => {
   try {
@@ -174,6 +185,17 @@ app.get("/fruits/:id", async (req, res) => {
     res.status(400).send("error, read logs for details");
   }
 });
+
+app.get("/formy", (req, res) => {
+  res.render("form.ejs")
+})
+
+app.post("/formy", (req, res) => {
+  const cheese = {}
+  cheese.cheese = req.body.cheese
+  cheese.cheese.cheese = req.body["cheese.cheese"]
+  res.json({body: req.body, cheese})
+})
 
 ///////////////////////////////////////////////////////
 // Server Listener
