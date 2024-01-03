@@ -1,11 +1,11 @@
 // console.log(process)
 
-// try{
+try{
 
-// }catch(error){
-//     console.log("-----", error.message, "------")
-//     res.status(400).send("error, read logs for details")
-// }
+}catch(error){
+    console.log("-----", error.message, "------")
+    res.status(400).send("error, read logs for details")
+}
 
 // expression ? true : false
 
