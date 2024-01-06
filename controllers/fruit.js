@@ -9,9 +9,9 @@ const Fruit = require("../models/Fruit");
 ///////////////////////////////////////
 const router = express.Router();
 
-//Middleware
+//Middleware - whenever we go to /fruits route, we want to make sure user is logged in. this middleware is ensuring that
 router.use((req, res, next) => {
-  console.table(req.session);
+  console.table(req.session); // req.session is not part of express, we created session middleware in server.js
 
   if (req.session.loggedIn) {
     next();
@@ -54,8 +54,11 @@ router.get("/seed", async (req, res) => {
 // Index Route Get -> /fruits
 router.get("/", async (req, res) => {
   try {
+    // get username from req.session
+    const username = req.session.username
+
     // get all fruits
-    const fruits = await Fruit.find({});
+    const fruits = await Fruit.find({username});
     // render a template
     // fruits/index.ejs = ./views/fruits/index.ejs
     res.render("fruits/index.ejs", { fruits });
@@ -76,6 +79,10 @@ router.post("/", async (req, res) => {
     // check if readyToEat should be true
     // expression ? true : false (ternary operator)
     req.body.readyToEat = req.body.readyToEat === "on" ? true : false;
+
+    // add user to req.body from req.session, this will be used in index route to get fruits belonging to only a prticular user
+    req.body.username = req.session.username
+
     // create the fruit in the database
     await Fruit.create(req.body);
     // redirect back to main page

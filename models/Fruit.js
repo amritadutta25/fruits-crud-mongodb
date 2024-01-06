@@ -16,6 +16,7 @@ const fruitSchema = new Schema({
   name: String,
   color: String,
   readyToEat: Boolean,
+  username: String // to know which user the fruit belongs to
 });
 
 // Model - object for interacting with the db
